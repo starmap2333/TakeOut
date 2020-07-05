@@ -5,6 +5,20 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!--    setting-->
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!--用于进行网络定位-->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!--用于访问GPS定位-->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
@@ -29,9 +43,16 @@
             </intent-filter>
         </activity>
         <activity android:name=".module.sharing.SharingPublishActivity" />
+        <activity android:name=".module.setting.UserDesignActivity" />
         <activity
             android:name=".module.sharing.SharingCommentActivity"
             android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".module.setting.SettingAboutActivity" />
+
+        <service android:name="com.amap.api.location.APSService" />
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="db515993fd3b895f2a7e0402a4c8315e" />
     </application>
 
 </manifest>

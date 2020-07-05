@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="select_location">
+        <item>手动设置地点：重庆</item>
+        <item>自动设置：使用GPS定位</item>
+    </string-array>
+</resources>
