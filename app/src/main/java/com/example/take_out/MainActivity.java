@@ -6,11 +6,10 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.take_out.adapters.BottomNavAdapter;
 import com.example.take_out.databinding.ActivityMainBinding;
-import com.example.take_out.module.sharing.SharingHostFragment;
+import com.example.take_out.module.sharing.SharingFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
@@ -31,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private void initData() {
         fragments = new ArrayList<>();
         fragments.add(BlankFragment.newInstance("", ""));
-        fragments.add(SharingHostFragment.newInstance());
+        fragments.add(SharingFragment.newInstance(2));
         fragments.add(BlankFragment.newInstance("", ""));
         fragments.add(BlankFragment.newInstance("", ""));
     }
@@ -45,16 +44,16 @@ public class MainActivity extends AppCompatActivity {
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.home_page_nav:
-                                binding.viewPager.setCurrentItem(0,false);
+                                binding.viewPager.setCurrentItem(0, false);
                                 return true;
                             case R.id.sharing_page_nav:
-                                binding.viewPager.setCurrentItem(1,false);
+                                binding.viewPager.setCurrentItem(1, false);
                                 return true;
                             case R.id.order_page_nav:
-                                binding.viewPager.setCurrentItem(2,false);
+                                binding.viewPager.setCurrentItem(2, false);
                                 return true;
                             case R.id.my_page_nav:
-                                binding.viewPager.setCurrentItem(3,false);
+                                binding.viewPager.setCurrentItem(3, false);
                                 return true;
                             default:
                                 return false;

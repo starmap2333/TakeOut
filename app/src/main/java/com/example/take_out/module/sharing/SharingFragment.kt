@@ -1,11 +1,12 @@
 package com.example.take_out.module.sharing
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.take_out.R
 import com.example.take_out.adapters.SharingItemRecyclerViewAdapter
@@ -27,19 +28,28 @@ class SharingFragment : Fragment() {
             savedInstanceState: Bundle?
     ): View? {
         binding = FragmentSharingBinding.inflate(inflater, container, false)
-        binding.rvSharing.adapter = SharingItemRecyclerViewAdapter(MyItem.ITEMS)
+        binding.rvSharing.adapter = SharingItemRecyclerViewAdapter(MyItem.ITEMS) { view, i ->
+            onClickItem(view, i)
+        }
         binding.rvSharing.layoutManager = GridLayoutManager(context, columnCount)
         binding.fbPublish.setOnClickListener {
-            findNavController().navigate(R.id.action_sharingFragment_to_sharingPublishFragment)
+            val intent = Intent(context, SharingPublishActivity::class.java)
+            startActivity(intent)
         }
         return binding.root
+    }
+
+    fun onClickItem(view: View, position: Int) {
+        Toast.makeText(context, "🚀$position", Toast.LENGTH_SHORT).show()
+        val intent = Intent(context, SharingCommentActivity::class.java)
+        startActivity(intent)
     }
 
     companion object {
         const val ARG_COLUMN_COUNT = "column-count"
 
         @JvmStatic
-        fun newInstance(columnCount: Int) = SharingPublishFragment().apply {
+        fun newInstance(columnCount: Int) = SharingFragment().apply {
             arguments = Bundle().apply {
                 putInt(ARG_COLUMN_COUNT, columnCount)
             }

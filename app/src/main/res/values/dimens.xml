@@ -4,4 +4,7 @@
     <dimen name="margin_media">16dp</dimen>
     <dimen name="margin_normal">8dp</dimen>
     <dimen name="margin_small">4dp</dimen>
+    <integer name="comment_length">127</integer>
+    <integer name="text_length">245</integer>
+    <integer name="title_length">22</integer>
 </resources>
