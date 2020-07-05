@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav2"
+    app:startDestination="@id/sharingFragment">
+
+    <fragment
+        android:id="@+id/sharingFragment"
+        android:name="com.example.take_out.module.sharing.SharingFragment"
+        android:label="fragment_sharing"
+        tools:layout="@layout/fragment_sharing">
+        <action
+            android:id="@+id/action_sharingFragment_to_sharingPublishFragment"
+            app:destination="@id/sharingPublishFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:launchSingleTop="false"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/sharingPublishFragment"
+        android:name="com.example.take_out.module.sharing.SharingPublishFragment"
+        android:label="sharing_publish_fragment"
+        tools:layout="@layout/sharing_publish_fragment" />
+</navigation>

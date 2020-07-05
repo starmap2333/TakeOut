@@ -1,3 +1,15 @@
 <resources>
-    <string name="app_name">Take_out</string>
+    <string name="app_name">吃货宝</string>
+    <string name="home">外卖</string>
+    <string name="sharing">发现</string>
+    <string name="my">我的</string>
+    <string name="order">订单</string>
+    <string name="action_back">返回</string>
+    <string name="publish">发布</string>
+    <string name="add_title">添加标题</string>
+    <string name="sharing_content_hint">分享此刻</string>
+    <string name="add_photo">添加照片</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="user_face_small">用户小头像</string>
 </resources>
