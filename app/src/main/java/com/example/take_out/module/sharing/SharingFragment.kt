@@ -14,7 +14,8 @@ import com.example.take_out.databinding.FragmentSharingBinding
 
 
 class SharingFragment : Fragment() {
-    private lateinit var binding: FragmentSharingBinding
+    private var _binding: FragmentSharingBinding? = null
+    private val binding get() = _binding!!
     private var columnCount = 2
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +28,7 @@ class SharingFragment : Fragment() {
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentSharingBinding.inflate(inflater, container, false)
+        _binding = FragmentSharingBinding.inflate(inflater, container, false)
         binding.rvSharing.adapter = SharingItemRecyclerViewAdapter(MyItem.ITEMS) { view, i ->
             onClickItem(view, i)
         }
@@ -39,10 +40,15 @@ class SharingFragment : Fragment() {
         return binding.root
     }
 
-    fun onClickItem(view: View, position: Int) {
+    private fun onClickItem(view: View, position: Int) {
         Toast.makeText(context, "🚀$position", Toast.LENGTH_SHORT).show()
         val intent = Intent(context, SharingCommentActivity::class.java)
         startActivity(intent)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
     companion object {
