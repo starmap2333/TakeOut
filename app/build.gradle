@@ -38,4 +38,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
+    //setting dependencies
+    implementation 'com.alibaba:fastjson:1.1.54.android'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
 }

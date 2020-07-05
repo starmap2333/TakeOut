@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.take_out.adapters.BottomNavAdapter;
 import com.example.take_out.databinding.ActivityMainBinding;
+import com.example.take_out.module.setting.SettingFragment;
 import com.example.take_out.module.sharing.SharingFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -32,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         fragments.add(BlankFragment.newInstance("", ""));
         fragments.add(SharingFragment.newInstance(2));
         fragments.add(BlankFragment.newInstance("", ""));
-        fragments.add(BlankFragment.newInstance("", ""));
+        fragments.add(new SettingFragment());
     }
 
     private void initView() {
