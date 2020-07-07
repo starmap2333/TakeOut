@@ -3,10 +3,8 @@
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    style="@style/SharingCommentDialog"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/top_round_shape">
+    android:layout_height="wrap_content">
 
     <Button
         android:id="@+id/btn_send"
@@ -22,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="@dimen/margin_normal"
-        android:hint="@string/sharing_content_hint"
+        android:hint="评论"
         android:paddingBottom="@dimen/margin_large"
         app:counterEnabled="true"
         app:counterMaxLength="@integer/comment_length"

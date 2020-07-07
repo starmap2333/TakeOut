@@ -1,4 +1,4 @@
-package com.example.take_out.module.setting;
+package com.example.take_out.commponent;
 
 import android.Manifest;
 import android.content.Intent;
@@ -204,13 +204,13 @@ public class SettingFragment extends Fragment {
         @NonNull
         @Override
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_share, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_setting_sharing, parent, false);
             return new ViewHolder(view);
         }
 
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            ((ViewHolder) holder).item_list.setText(infos[position]);
+            holder.item_list.setText(infos[position]);
         }
 
         @Override
@@ -223,7 +223,7 @@ public class SettingFragment extends Fragment {
 
             public ViewHolder(View view) {
                 super(view);
-                item_list = (TextView) view.findViewById(R.id.text_view);
+                item_list = view.findViewById(R.id.text_view);
             }
         }
     }
@@ -233,13 +233,13 @@ public class SettingFragment extends Fragment {
         @NonNull
         @Override
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_setting_ordeer, parent, false);
             return new ViewHolder(view);
         }
 
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            ((MyOrderAdapter.ViewHolder) holder).item_list.setText(infos[position]);
+            holder.item_list.setText(infos[position]);
         }
 
         @Override
@@ -252,7 +252,7 @@ public class SettingFragment extends Fragment {
 
             public ViewHolder(View view) {
                 super(view);
-                item_list = (TextView) view.findViewById(R.id.recycler_view_text);
+                item_list = view.findViewById(R.id.recycler_view_text);
             }
         }
     }

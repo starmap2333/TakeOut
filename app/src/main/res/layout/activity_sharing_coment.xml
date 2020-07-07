@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".module.sharing.SharingCommentActivity">
+    tools:context=".commponent.SharingCommentActivity">
 
     <!--<androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -105,21 +105,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:listitem="@layout/sharing_item" />
+                    tools:listitem="@layout/item_sharing" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.core.widget.NestedScrollView>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab"
-            style="@style/Widget.MaterialComponents.FloatingActionButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_sharing_page"
-            android:tint="@android:color/white"
-            app:layout_anchor="@id/appbar"
-            app:layout_anchorGravity="bottom|end" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
@@ -130,6 +121,6 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_small"
         android:gravity="center"
-        android:text="@string/sharing_content_hint"
+        android:text="评论"
         app:layout_constraintBottom_toBottomOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

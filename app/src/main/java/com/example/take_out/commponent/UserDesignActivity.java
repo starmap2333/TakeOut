@@ -1,4 +1,4 @@
-package com.example.take_out.module.setting;
+package com.example.take_out.commponent;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -21,7 +21,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.alibaba.fastjson.JSON;
 import com.example.take_out.R;
 import com.example.take_out.databinding.ActivityUserDesignBinding;
 
@@ -84,7 +83,7 @@ public class UserDesignActivity extends AppCompatActivity {
                 user.setInfo(edt_introduction.getText().toString());
                 user.setAddress(edt_address.getText().toString());
                 user.setPhone(edt_phone.getText().toString());
-                String json_user = JSON.toJSONString(user);
+                String json_user = "JSON.toJSONString(user)";
                 //Toast.makeText(getContext(),json_user,Toast.LENGTH_LONG);
                 Log.d("test", json_user);
                 edt_username.setText(user.getUsername());
