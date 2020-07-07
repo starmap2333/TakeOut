@@ -16,4 +16,7 @@
     <string name="txt_listview1"><u>skip to Share>>></u></string>
     <string name="about">这是一个关于吃货宝智能点餐系统的介绍。</string>
     <string name="about_update"><u>检查版本更新</u></string>
+
+    <string name="use_camera">使用相机</string>
+    <string name="use_pick">选择图片</string>
 </resources>

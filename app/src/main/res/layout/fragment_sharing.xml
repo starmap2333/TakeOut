@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".module.sharing.SharingFragment">
+    tools:context=".commponent.SharingFragment">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -14,7 +14,7 @@
             android:id="@+id/rv_sharing"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:listitem="@layout/sharing_item" />
+            tools:listitem="@layout/item_sharing" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fb_publish"

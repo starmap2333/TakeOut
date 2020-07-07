@@ -2,13 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.take_out">
-
-    <uses-permission android:name="android.permission.INTERNET" />
-
     <!--    setting-->
     <uses-permission android:name="android.permission.CAMERA" />
 
-    <uses-permission android:name="android.permission.FLASHLIGHT" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -38,16 +34,15 @@
             android:windowSoftInputMode="adjustNothing">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".module.sharing.SharingPublishActivity" />
-        <activity android:name=".module.setting.UserDesignActivity" />
+        <activity android:name=".commponent.SharingPublishActivity" />
+        <activity android:name=".commponent.UserDesignActivity" />
         <activity
-            android:name=".module.sharing.SharingCommentActivity"
+            android:name=".commponent.SharingCommentActivity"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".module.setting.SettingAboutActivity" />
+        <activity android:name=".commponent.SettingAboutActivity" />
 
         <service android:name="com.amap.api.location.APSService" />
         <meta-data

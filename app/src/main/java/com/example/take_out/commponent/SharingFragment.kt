@@ -1,4 +1,4 @@
-package com.example.take_out.module.sharing
+package com.example.take_out.commponent
 
 import android.content.Intent
 import android.os.Bundle

@@ -1,10 +1,10 @@
-package com.example.take_out.module.sharing
+package com.example.take_out.commponent
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.example.take_out.R
 
 // TODO: Rename parameter arguments, choose names that match

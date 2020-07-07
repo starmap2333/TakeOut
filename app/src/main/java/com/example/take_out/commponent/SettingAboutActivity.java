@@ -1,4 +1,4 @@
-package com.example.take_out.module.setting;
+package com.example.take_out.commponent;
 
 import android.os.Bundle;
 import android.view.View;
