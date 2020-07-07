@@ -1,4 +1,4 @@
-package com.example.take_out.module.sharing
+package com.example.take_out.component
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

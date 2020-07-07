@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.take_out.commponent.MyItem
+import com.example.take_out.component.MyItem
 import com.example.take_out.databinding.ItemSharingBinding
 
 class SharingItemRecyclerViewAdapter(

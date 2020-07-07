@@ -6,8 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.example.take_out.adapters.BottomNavAdapter;
-import com.example.take_out.commponent.SettingFragment;
-import com.example.take_out.commponent.SharingFragment;
+import com.example.take_out.component.SettingFragment;
+import com.example.take_out.component.SharingFragment;
 import com.example.take_out.databinding.ActivityMainBinding;
 
 import java.util.ArrayList;

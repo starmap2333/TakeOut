@@ -1,4 +1,4 @@
-package com.example.take_out.commponent
+package com.example.take_out.component
 
 import android.content.Intent
 import android.os.Bundle

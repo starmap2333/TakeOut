@@ -1,4 +1,4 @@
-package com.example.take_out.commponent;
+package com.example.take_out.component;
 
 public class UserDesignStruct {
     private String username;

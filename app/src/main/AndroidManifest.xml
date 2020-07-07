@@ -37,12 +37,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".commponent.SharingPublishActivity" />
-        <activity android:name=".commponent.UserDesignActivity" />
+        <activity android:name=".component.SharingPublishActivity" />
+        <activity android:name=".component.UserDesignActivity" />
         <activity
-            android:name=".commponent.SharingCommentActivity"
+            android:name=".component.SharingCommentActivity"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".commponent.SettingAboutActivity" />
+        <activity android:name=".component.SettingAboutActivity" />
 
         <service android:name="com.amap.api.location.APSService" />
         <meta-data
