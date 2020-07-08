@@ -8,6 +8,6 @@ data class Cuisine(
         var sale: Int = 0,
         var price: Double = 0.0,
         var name: String = "",
-        var imageUUID: String? = null,
+        var imageUUID: String = "",
         var store: Store
 )

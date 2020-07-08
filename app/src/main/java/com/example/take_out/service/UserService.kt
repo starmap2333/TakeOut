@@ -1,8 +1,8 @@
 package com.example.take_out.service
 
+import androidx.lifecycle.LiveData
 import com.example.take_out.data.User
 import okhttp3.MultipartBody
-import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Multipart
 import retrofit2.http.POST
@@ -15,17 +15,15 @@ interface UserService {
 
     data class UserAddressParam(var id: Int, var address: String)
 
-    @POST("/user/login")
-    fun login(@Body userLoginParam: UserLoginParam):
-            Call<ApiResult<Int>>
+    @POST("user/login")
+    fun login(@Body userLoginParam: UserLoginParam): LiveData<ApiResult<Int>>
 
-    @POST("/user/enroll")
-    fun enroll(@Body user: User): Call<ApiResult<Int>>
+    @POST("user/enroll")
+    fun enroll(@Body user: User): LiveData<ApiResult<Int>>
 
-    fun updateAddress(@Body userAddressParam: UserAddressParam)
-            : Call<ApiResult<String>>
+    fun updateAddress(@Body userAddressParam: UserAddressParam): LiveData<ApiResult<String>>
 
     @Multipart
-    @POST("/user/upload/face")
-    fun uploadUserFace(@Part file: MultipartBody.Part, @Part("id") id: Int): Call<ApiResult<String>>
+    @POST("user/upload/face")
+    fun uploadUserFace(@Part file: MultipartBody.Part, @Part("id") id: Int): LiveData<ApiResult<String>>
 }

@@ -5,5 +5,5 @@ data class Sharing(
         val user: User,
         var title: String = "",
         var content: String = "",
-        var imageUUID: String? = null
+        var imageUUID: String = ""
 )

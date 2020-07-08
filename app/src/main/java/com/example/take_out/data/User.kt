@@ -5,7 +5,7 @@ data class User(
         var id: Int = -1,
         var phone: String = "",
         var name: String = "",
-        var imageUUID: String? = null,
+        var imageUUID: String = "",
         var password: String = "",
         var address: String? = null
 )

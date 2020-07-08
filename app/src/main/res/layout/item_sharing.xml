@@ -26,7 +26,6 @@
             android:ellipsize="end"
             android:textAlignment="center"
             android:maxLines="2"
-            android:text="this is title 标题在此"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -36,6 +35,7 @@
             android:orientation="horizontal">
 
             <ImageView
+                android:id="@+id/img_user_face"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_margin="@dimen/margin_small"

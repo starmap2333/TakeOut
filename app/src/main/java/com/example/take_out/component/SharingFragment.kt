@@ -2,21 +2,26 @@ package com.example.take_out.component
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.take_out.R
 import com.example.take_out.adapters.SharingItemRecyclerViewAdapter
 import com.example.take_out.databinding.FragmentSharingBinding
+import com.example.take_out.viewmodels.SharingModel
 
 
 class SharingFragment : Fragment() {
     private var _binding: FragmentSharingBinding? = null
     private val binding get() = _binding!!
     private var columnCount = 2
+    private val sharingViewModel: SharingModel by activityViewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -24,19 +29,46 @@ class SharingFragment : Fragment() {
         }
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.rvSharing.layoutManager = GridLayoutManager(context, columnCount)
+        binding.rvSharing.adapter = SharingItemRecyclerViewAdapter(
+                requireContext(),
+                listOf()) { v, i ->
+            onClickItem(v, i)
+        }
+        sharingViewModel.sharingList.observe(viewLifecycleOwner, Observer {
+            Log.e("MAIN", "$it")
+            with(binding.rvSharing.adapter as SharingItemRecyclerViewAdapter) {
+                values = it
+                notifyDataSetChanged()
+            }
+        })
+
+        sharingViewModel.ready.observe(viewLifecycleOwner, Observer {
+            if (it) {
+                binding.progressBar.visibility = View.GONE
+                binding.layoutContent.visibility = View.VISIBLE
+            } else {
+                binding.progressBar.visibility = View.VISIBLE
+                binding.layoutContent.visibility = View.GONE
+            }
+        })
+
+        binding.fbPublish.setOnClickListener {
+            val intent = Intent(context, SharingPublishActivity::class.java)
+            startActivity(intent)
+        }
+
+    }
+
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentSharingBinding.inflate(inflater, container, false)
-        binding.rvSharing.adapter = SharingItemRecyclerViewAdapter(MyItem.ITEMS) { view, i ->
-            onClickItem(view, i)
-        }
-        binding.rvSharing.layoutManager = GridLayoutManager(context, columnCount)
-        binding.fbPublish.setOnClickListener {
-            val intent = Intent(context, SharingPublishActivity::class.java)
-            startActivity(intent)
-        }
+
         return binding.root
     }
 
@@ -59,17 +91,6 @@ class SharingFragment : Fragment() {
             arguments = Bundle().apply {
                 putInt(ARG_COLUMN_COUNT, columnCount)
             }
-        }
-    }
-
-}
-
-
-data class MyItem(val text: String, val drawableID: Int) {
-    companion object {
-        val ITEMS = MutableList(16) {
-
-            MyItem("user_name", R.drawable.sample_pic)
         }
     }
 
