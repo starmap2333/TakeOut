@@ -57,4 +57,10 @@
     <string name="require_login_msg">请到\"我的\"界面登录!</string>
     <string name="require_content_msg">请输入内容！</string>
     <string name="retry">重试</string>
+
+    <string name="total"><u>全部</u></string>
+    <string name="readyPay"><u>待付款</u></string>
+    <string name="readyfood"><u>待点餐</u></string>
+    <string name="readytalk"><u>待评价</u></string>
+    <string name="other"><u>退款/售后</u></string>
 </resources>
