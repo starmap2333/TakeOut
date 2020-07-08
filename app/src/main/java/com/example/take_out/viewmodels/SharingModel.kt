@@ -6,22 +6,23 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.example.take_out.data.Sharing
 import com.example.take_out.service.ApiResult
-import com.example.take_out.service.ResultCode
 import com.example.take_out.service.Service
 
 class SharingModel : ViewModel() {
-    private val _sharingList: MutableLiveData<ApiResult<List<Sharing>>> by lazy {
+
+    private val refresh = MutableLiveData(true)
+    private val _sharingList: LiveData<ApiResult<List<Sharing>>> = Transformations.switchMap(refresh) {
         Service.sharingService.getAllSharing()
     }
-
-
+    val loading = MutableLiveData<Boolean>()
     val sharingList: LiveData<List<Sharing>>
         get() = Transformations.map(_sharingList) {
+            loading.value = false
             it.data ?: listOf()
         }
 
-    val ready: LiveData<Boolean>
-        get() = Transformations.map(_sharingList) {
-            it.code == ResultCode.SUCCESS.code
-        }
+    fun refreshData() {
+        refresh.value = true
+        loading.value = true
+    }
 }

@@ -9,12 +9,12 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,8 +22,13 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.take_out.R;
+import com.example.take_out.TakeOutApplication;
+import com.example.take_out.data.User;
 import com.example.take_out.databinding.ActivityUserDesignBinding;
+import com.example.take_out.service.Service;
+import com.example.take_out.service.ServiceKt;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -32,6 +37,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
+
+import okhttp3.MultipartBody;
 
 
 public class UserDesignActivity extends AppCompatActivity {
@@ -51,6 +58,7 @@ public class UserDesignActivity extends AppCompatActivity {
     private EditText edt_phone;
     private Button btn_change;
     private ActivityUserDesignBinding binding;
+    private Bitmap imageBitmap;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -75,21 +83,33 @@ public class UserDesignActivity extends AppCompatActivity {
         edt_phone = frag_view2.findViewById(R.id.editText4);
 
         btn_change = frag_view2.findViewById(R.id.button_change);
-        btn_change.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                UserDesignStruct user = new UserDesignStruct();
-                user.setUsername(edt_username.getText().toString());
-                user.setInfo(edt_introduction.getText().toString());
-                user.setAddress(edt_address.getText().toString());
-                user.setPhone(edt_phone.getText().toString());
-                String json_user = "JSON.toJSONString(user)";
-                //Toast.makeText(getContext(),json_user,Toast.LENGTH_LONG);
-                Log.d("test", json_user);
-                edt_username.setText(user.getUsername());
-                edt_introduction.setText(user.getInfo());
-                edt_address.setText(user.getAddress());
-                edt_phone.setText(user.getPhone());
+        btn_change.setOnClickListener(v -> {
+            //TODO
+            if (imageBitmap != null) {
+                try {
+
+                    ByteArrayOutputStream out = new ByteArrayOutputStream();
+                    imageBitmap.compress(Bitmap.CompressFormat.JPEG, 80, out);
+                    out.flush();
+                    out.close();
+                    MultipartBody.Part part = ServiceKt.toMultiPartBodyPart(out.toByteArray());
+                    Service.INSTANCE.getUserService().uploadUserFace(part,
+                            ((TakeOutApplication) getApplication()).getUser().getId())
+                            .observe(this, result -> {
+                                TakeOutApplication app = (TakeOutApplication) getApplication();
+                                String uuid = result.getData();
+                                if (uuid != null) {
+                                    User user = app.getUser();
+                                    user.setImageUUID(uuid);
+                                    app.getUserLiveData().setValue(user);
+                                } else {
+                                    Toast.makeText(this, "upload failed", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
             }
         });
 
@@ -147,6 +167,7 @@ public class UserDesignActivity extends AppCompatActivity {
                         dispatchTakePictureIntent();
                     }
                 }
+                break;
             default:
                 break;
         }
@@ -170,7 +191,7 @@ public class UserDesignActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            imageBitmap = (Bitmap) extras.get("data");
             imageView.setImageBitmap(imageBitmap);
 
             String dir = currentPhotoPath;

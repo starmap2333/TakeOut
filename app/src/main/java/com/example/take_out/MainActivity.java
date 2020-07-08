@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.example.take_out.adapters.BottomNavAdapter;
+import com.example.take_out.component.LoginFragment;
 import com.example.take_out.component.SettingFragment;
 import com.example.take_out.component.SharingFragment;
 import com.example.take_out.databinding.ActivityMainBinding;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private ArrayList<Fragment> fragments;
+    private int myPage = 4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +32,8 @@ public class MainActivity extends AppCompatActivity {
         fragments.add(BlankFragment.newInstance("", ""));
         fragments.add(SharingFragment.newInstance(2));
         fragments.add(BlankFragment.newInstance("", ""));
-        fragments.add(new SettingFragment());
+        fragments.add(SettingFragment.newInstance());
+        fragments.add(LoginFragment.newInstance());
     }
 
     private void initView() {
@@ -48,14 +51,28 @@ public class MainActivity extends AppCompatActivity {
                         case R.id.order_page_nav:
                             binding.viewPager.setCurrentItem(2, false);
                             return true;
-                        case R.id.my_page_nav:
-                            binding.viewPager.setCurrentItem(3, false);
+                        case R.id.my_page_nav: {
+                            binding.viewPager.setCurrentItem(myPage, false);
                             return true;
+                        }
                         default:
                             return false;
                     }
                 }
         );
+        observeUserState();
+    }
+
+    void observeUserState() {
+        TakeOutApplication app = (TakeOutApplication) getApplication();
+        app.getUserLiveData().observe(this, user -> {
+            if (user.getId() == -1) {
+                myPage = 4;
+            } else {
+                myPage = 3;
+                binding.bottomNav.setSelectedItemId(R.id.my_page_nav);
+            }
+        });
     }
 }
 

@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="margin_large">24dp</dimen>
+    <dimen name="margin_very_large">32dp</dimen>
     <dimen name="margin_media">16dp</dimen>
     <dimen name="margin_normal">8dp</dimen>
     <dimen name="margin_small">4dp</dimen>
-    <integer name="comment_length">127</integer>
-    <integer name="text_length">245</integer>
-    <integer name="title_length">22</integer>
+    <dimen name="img_small">25dp</dimen>
+    <dimen name="text_normal">18sp</dimen>
+    <dimen name="text_media">24sp</dimen>
+
 </resources>

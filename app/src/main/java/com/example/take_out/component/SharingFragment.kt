@@ -2,19 +2,23 @@ package com.example.take_out.component
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.take_out.adapters.SharingItemRecyclerViewAdapter
+import androidx.recyclerview.widget.RecyclerView
+import com.example.take_out.R
+import com.example.take_out.TakeOutApplication
+import com.example.take_out.adapters.SharingItemAdapter
+import com.example.take_out.data.Sharing
 import com.example.take_out.databinding.FragmentSharingBinding
 import com.example.take_out.viewmodels.SharingModel
+import com.google.android.material.snackbar.Snackbar
 
+const val TEST_IN_PHYSIC = false
 
 class SharingFragment : Fragment() {
     private var _binding: FragmentSharingBinding? = null
@@ -33,34 +37,52 @@ class SharingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.rvSharing.layoutManager = GridLayoutManager(context, columnCount)
-        binding.rvSharing.adapter = SharingItemRecyclerViewAdapter(
+        binding.rvSharing.adapter = SharingItemAdapter(
                 requireContext(),
-                listOf()) { v, i ->
-            onClickItem(v, i)
+                listOf()) { sharing ->
+            onClickItem(sharing)
         }
-        sharingViewModel.sharingList.observe(viewLifecycleOwner, Observer {
-            Log.e("MAIN", "$it")
-            with(binding.rvSharing.adapter as SharingItemRecyclerViewAdapter) {
-                values = it
-                notifyDataSetChanged()
+        binding.rvSharing.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val topRowVerticalPosition =
+                        if (recyclerView.childCount == 0) {
+                            0
+                        } else {
+                            recyclerView.getChildAt(0).top
+                        }
+                binding.refreshLayout.isEnabled = topRowVerticalPosition >= 0 && !recyclerView.canScrollVertically(-1)
+
             }
         })
 
-        sharingViewModel.ready.observe(viewLifecycleOwner, Observer {
-            if (it) {
-                binding.progressBar.visibility = View.GONE
-                binding.layoutContent.visibility = View.VISIBLE
-            } else {
-                binding.progressBar.visibility = View.VISIBLE
-                binding.layoutContent.visibility = View.GONE
-            }
-        })
-
+        // use for physical mobile test
+        if (TEST_IN_PHYSIC) {
+            binding.layout.visibility = View.VISIBLE
+            (binding.rvSharing.adapter as SharingItemAdapter).values = SharingItemAdapter.fakeItems(16)
+        } else {
+            sharingViewModel.sharingList.observe(viewLifecycleOwner, Observer {
+                with(binding.rvSharing.adapter as SharingItemAdapter) {
+                    values = it
+                }
+            })
+            sharingViewModel.loading.observe(viewLifecycleOwner, Observer {
+                binding.refreshLayout.isRefreshing = it
+            })
+        }
+        binding.refreshLayout.isRefreshing = true
+        binding.refreshLayout.setOnRefreshListener {
+            sharingViewModel.refreshData()
+        }
         binding.fbPublish.setOnClickListener {
-            val intent = Intent(context, SharingPublishActivity::class.java)
-            startActivity(intent)
+            val user = (requireActivity().application as TakeOutApplication).user
+            if (user.id == -1) {
+                Snackbar.make(view, getString(R.string.require_login_msg), Snackbar.LENGTH_SHORT).show()
+            } else {
+                val intent = Intent(context, SharingPublishActivity::class.java)
+                startActivity(intent)
+            }
         }
-
     }
 
     override fun onCreateView(
@@ -72,9 +94,9 @@ class SharingFragment : Fragment() {
         return binding.root
     }
 
-    private fun onClickItem(view: View, position: Int) {
-        Toast.makeText(context, "🚀$position", Toast.LENGTH_SHORT).show()
+    private fun onClickItem(sharing: Sharing) {
         val intent = Intent(context, SharingCommentActivity::class.java)
+                .putExtra("sharing", sharing)
         startActivity(intent)
     }
 

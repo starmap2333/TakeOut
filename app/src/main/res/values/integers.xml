@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer name="card_flip_time_full">200</integer>
+    <integer name="comment_length">127</integer>
+    <integer name="text_length">245</integer>
+    <integer name="title_length">22</integer>
 </resources>

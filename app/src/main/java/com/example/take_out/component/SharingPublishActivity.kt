@@ -11,10 +11,17 @@ import android.provider.MediaStore
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
 import com.example.take_out.R
+import com.example.take_out.TakeOutApplication
+import com.example.take_out.data.Sharing
 import com.example.take_out.databinding.ActivitySharingPublishBinding
+import com.example.take_out.service.ResultCode
+import com.example.take_out.service.Service
+import com.example.take_out.service.toMultiPartBodyPart
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import java.io.ByteArrayOutputStream
 
 
 class SharingPublishActivity : AppCompatActivity() {
@@ -25,7 +32,7 @@ class SharingPublishActivity : AppCompatActivity() {
         const val REQUEST_PERMISSION = 3
     }
 
-    private lateinit var bitmap: Bitmap
+    private var bitmap: Bitmap? = null
     private lateinit var binding: ActivitySharingPublishBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,18 +43,8 @@ class SharingPublishActivity : AppCompatActivity() {
         }
 
         binding.btnPublish.setOnClickListener {
-            /* val sharing = Sharing().run {
-                 userId = "一个用户"
-                 title = "一个标题"
-                 imagePath = "图片路径"
-                 content = "这是内容"
-                 val gson = Gson()
-                 val json = gson.toJson(this)
-                 json
-             }*/
-            Snackbar.make(it, "正在进行中🚀: sharing", Snackbar.LENGTH_LONG)
-                    .setBackgroundTint(ContextCompat.getColor(this, R.color.colorPrimaryDark))
-                    .show()
+            it.isEnabled = false
+            publish()
         }
 
         binding.imgPublish.setOnClickListener {
@@ -61,6 +58,44 @@ class SharingPublishActivity : AppCompatActivity() {
             }.show()
         }
         setContentView(binding.root)
+    }
+
+    private fun publish() {
+        //TODO 用户输入检查
+        if (bitmap != null) {
+            binding.btnPublish.isEnabled = false
+            val title = binding.edtTitle.text.toString().trim()
+            val content = binding.edtContent.text.toString().trim()
+            val userId = (application as TakeOutApplication).user.id
+            val out = ByteArrayOutputStream()
+            bitmap!!.compress(Bitmap.CompressFormat.JPEG, 80, out)
+            out.close()
+            Service.sharingService.publishSharing(out.toByteArray().toMultiPartBodyPart(),
+                    title, content, userId).observe(this, Observer { result ->
+                when (result.code) {
+                    ResultCode.SUCCESS.code -> onPublishSuccess(result.data)
+                    ResultCode.FAIL.code -> onPublishFailed()
+                }
+            })
+        }
+    }
+
+    private fun onPublishFailed() {
+        Snackbar.make(binding.root, "", Snackbar.LENGTH_SHORT)
+                .setAction(R.string.retry) {
+                    publish()
+                }.show()
+        binding.btnPublish.isEnabled = true
+    }
+
+    private fun onPublishSuccess(sharing: Sharing?) {
+        if (sharing == null) return onPublishFailed()
+        else {
+            val intent = Intent(this, SharingCommentActivity::class.java)
+                    .putExtra("sharing", sharing)
+            startActivity(intent)
+            finish()
+        }
     }
 
     private fun takePic() {

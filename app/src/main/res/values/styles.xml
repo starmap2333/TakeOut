@@ -7,8 +7,12 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="SharingCommentDialog" parent="Theme.MaterialComponents.BottomSheetDialog">
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:backgroundDimEnabled">true</item>
+    <style name="BottomSheetEdit" parent="Theme.MaterialComponents.DayNight.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+        <item name="colorPrimary">#FFA000</item>
+        <item name="colorPrimaryDark">#FF6F00</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="colorAccent">@color/colorAccent</item>
     </style>
 </resources>

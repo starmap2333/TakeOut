@@ -26,7 +26,9 @@ import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.example.take_out.R;
+import com.example.take_out.TakeOutApplication;
 import com.example.take_out.databinding.FragmentSettingBinding;
+import com.example.take_out.service.ServiceKt;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -122,12 +124,9 @@ public class SettingFragment extends Fragment {
         setupRecyclerViewSharing();
         setupRecyclerViewOrder();
 
-        binding.imageButtonFragUserdesign.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), UserDesignActivity.class);
-                startActivity(intent);
-            }
+        binding.imageButtonFragUserdesign.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), UserDesignActivity.class);
+            startActivity(intent);
         });
 
         binding.spinnerSelectlocation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -148,12 +147,14 @@ public class SettingFragment extends Fragment {
             }
         });
 
-        binding.buttonAbout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), SettingAboutActivity.class);
-                startActivity(intent);
-            }
+        binding.buttonAbout.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), SettingAboutActivity.class);
+            startActivity(intent);
+        });
+
+        ((TakeOutApplication) requireActivity().getApplication()).getUserLiveData().observe(getViewLifecycleOwner(), user -> {
+            ServiceKt.loadUrl(binding.imageView, requireContext(), user.getImageUUID());
+            binding.textViewUsername.setText(user.getName());
         });
     }
 
@@ -233,7 +234,7 @@ public class SettingFragment extends Fragment {
         @NonNull
         @Override
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_setting_ordeer, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_setting_order, parent, false);
             return new ViewHolder(view);
         }
 
