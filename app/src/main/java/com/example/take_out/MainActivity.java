@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.example.take_out.adapters.BottomNavAdapter;
+import com.example.take_out.component.MainOrderFragment;
 import com.example.take_out.component.SettingFragment;
 import com.example.take_out.component.SharingFragment;
 import com.example.take_out.databinding.ActivityMainBinding;
@@ -29,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         fragments = new ArrayList<>();
         fragments.add(BlankFragment.newInstance("", ""));
         fragments.add(SharingFragment.newInstance(2));
-        fragments.add(BlankFragment.newInstance("", ""));
+        fragments.add(new MainOrderFragment());
         fragments.add(new SettingFragment());
     }
 

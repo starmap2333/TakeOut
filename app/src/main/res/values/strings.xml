@@ -19,4 +19,10 @@
 
     <string name="use_camera">使用相机</string>
     <string name="use_pick">选择图片</string>
+
+    <string name="total"><u>全部</u></string>
+    <string name="readyPay"><u>待付款</u></string>
+    <string name="readyfood"><u>待点餐</u></string>
+    <string name="readytalk"><u>待评价</u></string>
+    <string name="other"><u>退款/售后</u></string>
 </resources>
