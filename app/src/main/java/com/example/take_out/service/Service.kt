@@ -28,8 +28,11 @@ object Service {
     val sharingService: SharingService
         get() = retrofit.create(SharingService::class.java)
 
+    val myOrderService: MyOrderService
+        get() = retrofit.create(MyOrderService::class.java)
 }
 
+@JvmOverloads
 fun ImageView.loadUrl(context: Context, imgUUID: String?,
                       placeholder: Int = R.drawable.recycler_corner,
                       fallback: Int = R.drawable.recycler_totalview) {

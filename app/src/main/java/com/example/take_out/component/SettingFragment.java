@@ -1,6 +1,7 @@
 package com.example.take_out.component;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -9,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,10 +51,22 @@ public class SettingFragment extends Fragment {
     FragmentSettingBinding binding;
 
     private String[] infos = new String[]{
-            "只是一个测试1",
-            "只是一个测试2",
-            "只是一个测试3",
-            "只是一个测试4"};
+            "美食1：费用0000￥",
+            "美食2：费用0000￥",
+            "美食3：费用0000￥",
+            "美食4：费用0000￥"};
+    private String[] infos_share = new String[]{
+            "这是一个记录1",
+            "这是一个记录2",
+            "这是一个记录3",
+            "这是一个记录4"
+    };
+    private int[] order_image = new int[]{
+            R.drawable.order_chuangxiang,
+            R.drawable.order_danta,
+            R.drawable.order_ganguoji,
+            R.drawable.order_meishi
+    };
 
     private String location;
     //声明定位回调监听器
@@ -201,6 +216,7 @@ public class SettingFragment extends Fragment {
 
     private class MySharingAdapter extends RecyclerView.Adapter<MySharingAdapter.ViewHolder> {
 
+
         @NonNull
         @Override
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -210,26 +226,29 @@ public class SettingFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            holder.item_list.setText(infos[position]);
+            holder.item_list.setText(infos_share[position]);
         }
 
         @Override
         public int getItemCount() {
-            return infos.length;
+            return infos_share.length;
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
             public TextView item_list;
+            public ImageView imageView;
 
             public ViewHolder(View view) {
                 super(view);
                 item_list = view.findViewById(R.id.text_view);
+                imageView = view.findViewById(R.id.imageView_item);
             }
         }
     }
 
 
     public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.ViewHolder> {
+
         @NonNull
         @Override
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -237,9 +256,15 @@ public class SettingFragment extends Fragment {
             return new ViewHolder(view);
         }
 
+        @SuppressLint("ResourceAsColor")
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             holder.item_list.setText(infos[position]);
+            holder.imageView_order.setImageResource(order_image[position]);
+            if (position == 3) {
+                holder.button_order.setText("已支付");
+                holder.button_order.setBackgroundColor(R.color.black);
+            }
         }
 
         @Override
@@ -249,11 +274,17 @@ public class SettingFragment extends Fragment {
 
         public class ViewHolder extends RecyclerView.ViewHolder {
             public TextView item_list;
+            public ImageView imageView_order;
+            public Button button_order;
 
             public ViewHolder(View view) {
                 super(view);
                 item_list = view.findViewById(R.id.recycler_view_text);
+                imageView_order = view.findViewById(R.id.recycler_view_image);
+                button_order = view.findViewById(R.id.recycle_view_btn);
             }
         }
+
+
     }
 }

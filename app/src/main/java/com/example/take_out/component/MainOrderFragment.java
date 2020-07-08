@@ -1,5 +1,6 @@
 package com.example.take_out.component;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,16 +12,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.take_out.R;
+import com.example.take_out.data.MyOrder;
 import com.example.take_out.databinding.FragmentMainorderBinding;
+import com.example.take_out.service.ServiceKt;
+import com.example.take_out.viewmodels.OrderModel;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -39,12 +44,12 @@ public class MainOrderFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private View orderView;
-    private ArrayList<String> list = new ArrayList<String>(Arrays.asList("txt1", "txt2", "txt3", "txt4", "txt5", "txt6", "txt7"));
-    private ArrayList<String> list_select = new ArrayList<String>();
-    private ArrayList<Integer> delete_position = new ArrayList<Integer>();
     private OrderClassRecyclerView mAdapter_test;
     private RecyclerView recyclerView_test;
     private LinearLayoutManager mLayoutManager_test;
+
+    private OrderModel orderModel;
+    private List<MyOrder> list_order;
 
     public MainOrderFragment() {
         // Required empty public constructor
@@ -78,6 +83,24 @@ public class MainOrderFragment extends Fragment {
     }
 
     @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        orderModel = new ViewModelProvider(this).get(OrderModel.class);
+
+        /*
+         *获取后端数据
+         */
+
+
+        orderModel.getOrderList().observe(getViewLifecycleOwner(), ordersList -> {
+            mAdapter_test.setData(ordersList);
+            list_order = ordersList;
+//            ServiceKt.loadUrl(imgview, getContext(), "uuid",);
+            mAdapter_test.notifyDataSetChanged();
+        });
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -90,20 +113,15 @@ public class MainOrderFragment extends Fragment {
         mLayoutManager_test.setOrientation(RecyclerView.VERTICAL);
         recyclerView_test.setLayoutManager(mLayoutManager_test);
 
-        for (int i = 0; i < list.size(); i++) {
-            list_select.add(list.get(i));
-        }
 
-        mAdapter_test = new OrderClassRecyclerView(list_select, (view, position) -> {
+        mAdapter_test = new OrderClassRecyclerView(getContext(), list_order, (view, position) -> {
             //操作某一个外观。
             Log.d("tag", String.valueOf(position));
             checkBox = view.findViewById(R.id.radioButton_shopname);
             if (!checkBox.isChecked()) {
                 checkBox.setChecked(true);
-                delete_position.add(position);
             } else {
                 checkBox.setChecked(false);
-                delete_position.remove(0);
             }
 
         });
@@ -128,21 +146,23 @@ public class MainOrderFragment extends Fragment {
             binding.btnReadytofood.setText("待点餐");
             binding.btnReadytotalk.setText("待评价");
             binding.btnOtherside.setText("退款/售后");
-            list_select = new ArrayList<>();
-            for (int i = 0; i < list.size(); i++) {
-                if (i % 2 != 0)
-                    list_select.add(list.get(i));
-            }
-            mAdapter_test.setData(list_select);
+
+            /*
+             *待付款选择
+             */
+
+
+            mAdapter_test.setData(list_order);
         });
         click_notRequired();
 
         binding.checkfororder.setOnClickListener(v -> {
             recyclerView_test.setAdapter(mAdapter_test);
-            ArrayList data = mAdapter_test.getData();
+            List data = mAdapter_test.getData();
             mAdapter_test.setData(data);
             Toast.makeText(getContext(), "确认订单。", Toast.LENGTH_SHORT).show();
         });
+
 
 
         return orderView;
@@ -150,17 +170,9 @@ public class MainOrderFragment extends Fragment {
 
     public void showAllItem() {
         //list_select.clear();
-        mAdapter_test.setData(list);
+        mAdapter_test.setData(list_order);
     }
 
-    public void removeItem() {
-        for (int i = 0; i < list_select.size(); i++) {
-            if (i % 2 == 1) {
-                list_select.remove(i);
-            }
-        }
-        mAdapter_test.setData(list_select);
-    }
 
     public void click_notRequired() {
         binding.btnReadytofood.setOnClickListener(v -> {
@@ -187,39 +199,56 @@ public class MainOrderFragment extends Fragment {
     }
 }
 
-class OrderClassRecyclerView extends RecyclerView.Adapter {
+class OrderClassRecyclerView extends RecyclerView.Adapter<OrderClassRecyclerView.ViewHolder> {
     OrderClassRecyclerView.OnItemClickListener listener;
-    private ArrayList list_recycler;
+    private List<MyOrder> list_recycler;
+    private Context context;
 
-    public OrderClassRecyclerView(ArrayList list, OrderClassRecyclerView.OnItemClickListener listener) {
+    public OrderClassRecyclerView(Context context, List list, OrderClassRecyclerView.OnItemClickListener listener) {
+        this.context = context;
         this.list_recycler = list;
         this.listener = listener;
     }
 
-    ArrayList getData() {
+    List getData() {
         return this.list_recycler;
     }
 
-    void setData(ArrayList data) {
+    void setData(List data) {
         this.list_recycler = data;
         notifyDataSetChanged();
     }
 
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_main_order, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        ((OrderClassRecyclerView.ViewHolder) holder).itemView.setOnClickListener(
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        holder.itemView.setOnClickListener(
                 v -> {
                     listener.onItemClick(v, position);
                 }
         );
-        ((OrderClassRecyclerView.ViewHolder) holder).checkBox.setChecked(false);
+
+        /*
+         *try in here
+         */
+
+        ServiceKt.loadUrl(holder.imageView, context,
+                list_recycler.get(position).getCuisine().getImageUUID());
+        holder.item_list.setText(String.valueOf(list_recycler.get(position).getPrice()));
+
+        if (list_recycler.get(position).getState()) {
+            holder.textView_orderstate.setText("已完成");
+        } else {
+            holder.textView_orderstate.setText("未完成");
+        }
+
+        holder.checkBox.setChecked(false);
     }
 
     @Override
@@ -235,12 +264,14 @@ class OrderClassRecyclerView extends RecyclerView.Adapter {
         public TextView item_list;
         public ImageView imageView;
         public CheckBox checkBox;
+        public TextView textView_orderstate;
 
         public ViewHolder(View view) {
             super(view);
-            item_list = view.findViewById(R.id.textView_time);
+            item_list = view.findViewById(R.id.textView_price);
             imageView = view.findViewById(R.id.image);
             checkBox = view.findViewById(R.id.radioButton_shopname);
+            textView_orderstate = view.findViewById(R.id.textView_orderState);
         }
     }
 }

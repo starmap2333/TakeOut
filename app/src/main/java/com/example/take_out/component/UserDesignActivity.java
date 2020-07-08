@@ -9,7 +9,6 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -78,18 +77,20 @@ public class UserDesignActivity extends AppCompatActivity {
         btn_change.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UserDesignStruct user = new UserDesignStruct();
-                user.setUsername(edt_username.getText().toString());
-                user.setInfo(edt_introduction.getText().toString());
-                user.setAddress(edt_address.getText().toString());
-                user.setPhone(edt_phone.getText().toString());
-                String json_user = "JSON.toJSONString(user)";
+//                UserDesignStruct user = new UserDesignStruct();
+//                user.setUsername(edt_username.getText().toString());
+//                user.setInfo(edt_introduction.getText().toString());
+//                user.setAddress(edt_address.getText().toString());
+//                user.setPhone(edt_phone.getText().toString());
+//                String json_user = "JSON.toJSONString(user)";
                 //Toast.makeText(getContext(),json_user,Toast.LENGTH_LONG);
-                Log.d("test", json_user);
-                edt_username.setText(user.getUsername());
-                edt_introduction.setText(user.getInfo());
-                edt_address.setText(user.getAddress());
-                edt_phone.setText(user.getPhone());
+//                Log.d("test", json_user);
+//                edt_username.setText(user.getUsername());
+//                edt_introduction.setText(user.getInfo());
+//                edt_address.setText(user.getAddress());
+//                edt_phone.setText(user.getPhone());
+//                UserService userService = null;
+//                userService.uploadUserFace(currentPhotoPath.,42);
             }
         });
 
