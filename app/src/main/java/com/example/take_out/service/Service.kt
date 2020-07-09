@@ -30,6 +30,9 @@ object Service {
 
     val sharingService: SharingService
         get() = retrofit.create(SharingService::class.java)
+
+    val myOrderService: MyOrderService
+        get() = retrofit.create(MyOrderService::class.java)
 }
 
 fun ByteArray.toMultiPartBodyPart(): MultipartBody.Part {

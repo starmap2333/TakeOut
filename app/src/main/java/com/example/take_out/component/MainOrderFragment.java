@@ -14,17 +14,21 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.take_out.R;
+import com.example.take_out.TakeOutApplication;
 import com.example.take_out.data.MyOrder;
+import com.example.take_out.data.User;
 import com.example.take_out.databinding.FragmentMainorderBinding;
 import com.example.take_out.service.ServiceKt;
 import com.example.take_out.viewmodels.OrderModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,58 +38,34 @@ import java.util.List;
  */
 public class MainOrderFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
     FragmentMainorderBinding binding;
     CheckBox checkBox;
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
     private View orderView;
     private OrderClassRecyclerView mAdapter_test;
     private RecyclerView recyclerView_test;
     private LinearLayoutManager mLayoutManager_test;
 
     private OrderModel orderModel;
-    private List<MyOrder> list_order;
 
     public MainOrderFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment BlankFragment_MainOrder.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static MainOrderFragment newInstance(String param1, String param2) {
-        MainOrderFragment fragment = new MainOrderFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+
+    public static MainOrderFragment newInstance() {
+        return new MainOrderFragment();
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        orderModel = new ViewModelProvider(this).get(OrderModel.class);
+        LiveData<User> userLiveData = ((TakeOutApplication) requireActivity().getApplication()).getUserLiveData();
+        orderModel = new ViewModelProvider(this,
+                new OrderModel.ViewModelFactory(userLiveData.getValue().getId())).get(OrderModel.class);
+        userLiveData.observe(getViewLifecycleOwner(), user ->
+                orderModel.setUserId(user.getId()));
 
         /*
          *获取后端数据
@@ -94,9 +74,6 @@ public class MainOrderFragment extends Fragment {
 
         orderModel.getOrderList().observe(getViewLifecycleOwner(), ordersList -> {
             mAdapter_test.setData(ordersList);
-            list_order = ordersList;
-//            ServiceKt.loadUrl(imgview, getContext(), "uuid",);
-            mAdapter_test.notifyDataSetChanged();
         });
     }
 
@@ -114,7 +91,7 @@ public class MainOrderFragment extends Fragment {
         recyclerView_test.setLayoutManager(mLayoutManager_test);
 
 
-        mAdapter_test = new OrderClassRecyclerView(getContext(), list_order, (view, position) -> {
+        mAdapter_test = new OrderClassRecyclerView(getContext(), new ArrayList<>(), (view, position) -> {
             //操作某一个外观。
             Log.d("tag", String.valueOf(position));
             checkBox = view.findViewById(R.id.radioButton_shopname);
@@ -125,9 +102,7 @@ public class MainOrderFragment extends Fragment {
             }
 
         });
-//        binding.checkfororder.setOnClickListener(v -> {
-//            recyclerView_test.setAdapter(mAdapter_test);
-//        });
+
         recyclerView_test.setAdapter(mAdapter_test);
 
 
@@ -136,8 +111,8 @@ public class MainOrderFragment extends Fragment {
                     binding.btnReadytopay.setText("待付款");
                     binding.btnReadytofood.setText("待点餐");
                     binding.btnReadytotalk.setText("待评价");
-                    binding.btnOtherside.setText("退款/售后");
-                    showAllItem();
+            binding.btnOtherside.setText("退款/售后");
+            orderModel.refreshData();
                 }
         );
         binding.btnReadytopay.setOnClickListener(v -> {
@@ -150,9 +125,14 @@ public class MainOrderFragment extends Fragment {
             /*
              *待付款选择
              */
+            List<MyOrder> orders = mAdapter_test.getData();
+            List<MyOrder> ordersFalse = new ArrayList<>();
+            for (MyOrder order : orders) {
+                if (!order.getState())
+                    ordersFalse.add(order);
+            }
 
-
-            mAdapter_test.setData(list_order);
+            mAdapter_test.setData(ordersFalse);
         });
         click_notRequired();
 
@@ -163,16 +143,8 @@ public class MainOrderFragment extends Fragment {
             Toast.makeText(getContext(), "确认订单。", Toast.LENGTH_SHORT).show();
         });
 
-
-
         return orderView;
     }
-
-    public void showAllItem() {
-        //list_select.clear();
-        mAdapter_test.setData(list_order);
-    }
-
 
     public void click_notRequired() {
         binding.btnReadytofood.setOnClickListener(v -> {
@@ -210,7 +182,7 @@ class OrderClassRecyclerView extends RecyclerView.Adapter<OrderClassRecyclerView
         this.listener = listener;
     }
 
-    List getData() {
+    List<MyOrder> getData() {
         return this.list_recycler;
     }
 
@@ -269,7 +241,7 @@ class OrderClassRecyclerView extends RecyclerView.Adapter<OrderClassRecyclerView
         public ViewHolder(View view) {
             super(view);
             item_list = view.findViewById(R.id.textView_price);
-            imageView = view.findViewById(R.id.image);
+            imageView = view.findViewById(R.id.img_orderimage);
             checkBox = view.findViewById(R.id.radioButton_shopname);
             textView_orderstate = view.findViewById(R.id.textView_orderState);
         }

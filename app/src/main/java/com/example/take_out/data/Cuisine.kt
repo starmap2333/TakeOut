@@ -12,5 +12,6 @@ data class Cuisine(
         var price: Double = 0.0,
         var name: String = "",
         var imageUUID: String? = null,
-        var store: Store
+        var store: Store,
+        var num: Int = 0
 ) : Parcelable

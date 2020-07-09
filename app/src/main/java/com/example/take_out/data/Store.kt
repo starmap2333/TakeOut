@@ -9,5 +9,6 @@ data class Store(
         var phone: String = "",
         var name: String = "",
         var address: String = "",
-        var description: String = ""
+        var description: String = "",
+        var imageUUID: String? = null
 ) : Parcelable

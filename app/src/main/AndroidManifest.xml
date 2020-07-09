@@ -42,6 +42,8 @@
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".component.SettingAboutActivity" />
         <activity android:name=".component.EnrollActivity" />
+        <activity android:name=".component.StoreActivity" />
+        <activity android:name=".component.PurchaseActivity" />
 
         <service android:name="com.amap.api.location.APSService" />
         <meta-data
